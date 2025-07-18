@@ -28,6 +28,14 @@
   cursor: pointer;
 }
 
+.button:hover {
+  opacity: 0.6;
+}
+
+.button_like:active {
+  color: #000;
+}
+
 .header {
   background-color: #000;
 }
@@ -114,6 +122,95 @@
 .header__edit-icon {
   width: 24px;
   height: 24px;
+}
+
+.popup_opened {
+  display: none;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.popup__container {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  max-width: 430px;
+  padding: 35px;
+  border-radius: 10px;
+}
+
+.popup__close-button {
+  align-self: end;
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 40px;
+  height: 40px;
+}
+
+.popup__close-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.popup__title {
+  font-family: "Inter-Black", Arial, sans-serif;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #000;
+  align-self: flex-start;
+  margin: 0;
+  padding-bottom: 54px;
+}
+
+.popup__input {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #000;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-bottom: 2px solid #c4c4c4;
+}
+
+.popup__input::placeholder {
+  color: #c4c4c4;
+}
+
+.popup__save-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: #000;
+  color: #fff;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.2;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  margin-top: 45px;
+}
+
+.popup__save-button:hover {
+  opacity: 0.8;
 }
 
 .header__add-button {

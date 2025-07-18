@@ -35,6 +35,33 @@
                   alt="Edit Icon"
                 />
               </a>
+              <div class="popup popup_opened">
+                <form class="popup__container">
+                  <button class="popup__close-button button">
+                    <img
+                      class="popup__close-icon"
+                      src="./images/Close Icon.png"
+                      alt="Close Icon"
+                    />
+                  </button>
+                  <h2 class="popup__title">Edit profile</h2>
+                  <input
+                    class="popup__input"
+                    type="text"
+                    placeholder="Name"
+                    name="name"
+                    required
+                  />
+                  <input
+                    class="popup__input"
+                    type="text"
+                    placeholder="About me"
+                    name="about"
+                    required
+                  />
+                  <button class="popup__save-button" type="submit">Save</button>
+                </form>
+              </div>
             </div>
 
             <p class="header__subtitle">Explorer</p>
@@ -144,7 +171,7 @@
           />
           <div class="main__gallery-info">
             <h2 class="main__gallery-photo-title">Vanoise National Park</h2>
-            <button class="main__gallery-like-button button">
+            <button class="main__gallery-like-button button button_like-active">
               <img
                 class="main__gallery-like-icon"
                 src="./images/Vector like.svg"
