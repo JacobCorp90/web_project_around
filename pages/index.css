@@ -32,9 +32,9 @@
   opacity: 0.6;
 }
 
-.button_like:active {
+/*.button_like:active {
   color: #000;
-}
+}*/
 
 .header {
   background-color: #000;
@@ -394,6 +394,17 @@
   .header__add-icon {
     height: 16px;
     width: 16px;
+  }
+
+  .popup__container {
+    margin-right: 15%;
+  }
+
+  .popup__close-button {
+    top: -50px;
+    right: 26px;
+    width: 26px;
+    height: 26px;
   }
 
   .main__gallery {
