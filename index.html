@@ -65,6 +65,34 @@
                   <button class="popup__save-button" type="submit">Save</button>
                 </form>
               </div>
+              <div class="image-popup image-popup_opened">
+                <form class="image-popup__container">
+                  <button class="image-popup__close-button button" type="button">
+                    <img
+                      class="image-popup__close-icon"
+                      src="./images/Close-Icon.png"
+                      alt="Close Icon"
+                    />
+                  </button>
+                  <h2 class="image-popup__title">New place</h2>
+                  <input
+                    class="image-popup__input image-popup__input_title"
+                    type="text"
+                    placeholder="Title"
+                    name="Title"
+                    required
+                  />
+                  <input
+                    class="image-popup__input image-popup__input_url"
+                    type="text"
+                    placeholder="Image URL"
+                    name="Image URL"
+                    required
+                  />
+                  <button class="image-popup__save-button" type="submit">Save</button>
+                </form>
+              </div>
+
             </div>
 
             <p class="header__subtitle">Explorer</p>
@@ -81,108 +109,25 @@
     </header>
     <main class="main">
       <section class="main__gallery">
-        <div class="main__gallery-item">
-          <img
-            class="main__gallery-image"
-            src="./images/kirill-pershin-1.jpg"
-            alt="A river flows between towering pine trees as sunlight pierces the forest, casting golden tones. In the background, a massive mountain stands like a silent guardian. This image captures nature’s serene power and the perfect balance between water, rock, and light. A majestic and peaceful landscape to admire and reflect on."
-          />
-          <div class="main__gallery-info">
-            <h2 class="main__gallery-photo-title">Yosemite Valley</h2>
-            <button class="main__gallery-like-button button">
-              <img
-                class="main__gallery-like-icon"
-                src="./images/Vector-like.svg"
-                alt="Like Icon"
-              />
-            </button>
+        <template id="card-template">
+          <div class="main__gallery-item">
+            <img
+              class="main__gallery-image"
+              src=""
+              alt=""
+            />
+            <div class="main__gallery-info">
+              <h2 class="main__gallery-photo-title"></h2>
+              <button class="main__gallery-like-button button">
+                <img
+                  class="main__gallery-like-icon"
+                  src="./images/Vector-like.svg"
+                  alt="Like Icon"
+                />
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="main__gallery-item">
-          <img
-            class="main__gallery-image"
-            src="./images/kirill-pershin-2.jpg"
-            alt="Wooden cabins rest beside a quiet dock while vintage boats float calmly on a mirrored lake. Surrounded by rugged peaks and pine trees, the place evokes peace, tradition, and natural beauty. The perfect reflection in the water creates symmetry and stillness. An ideal hideaway to unplug and enjoy serenity."
-          />
-          <div class="main__gallery-info">
-            <h2 class="main__gallery-photo-title">Lago di Braies</h2>
-            <button class="main__gallery-like-button button">
-              <img
-                class="main__gallery-like-icon"
-                src="./images/Vector-like.svg"
-                alt="Like Icon"
-              />
-            </button>
-          </div>
-        </div>
-        <div class="main__gallery-item">
-          <img
-            class="main__gallery-image"
-            src="./images/kirill-pershin-3.jpg"
-            alt="A turquoise lake reflects snow-covered peaks with stunning clarity. The stillness of the water creates a perfect natural mirror, doubling the magnitude of the landscape. With a clear sky and towering mountains, the scene feels open, fresh, and deeply contemplative. Pure, untouched nature at its most beautiful and calm."
-          />
-          <div class="main__gallery-info">
-            <h2 class="main__gallery-photo-title">Lago Louise</h2>
-            <button class="main__gallery-like-button button">
-              <img
-                class="main__gallery-like-icon"
-                src="./images/Vector-like.svg"
-                alt="Like Icon"
-              />
-            </button>
-          </div>
-        </div>
-        <div class="main__gallery-item">
-          <img
-            class="main__gallery-image"
-            src="./images/kirill-pershin-4.jpg"
-            alt="Night falls over the mountains, revealing a starry sky that contrasts with the dark, snowy peaks. The stars seem almost within reach, touching the summits. This image inspires silence, awe, and reflection under the vast universe. A stunning nighttime portrait of majestic isolation and cosmic beauty."
-          />
-          <div class="main__gallery-info">
-            <h2 class="main__gallery-photo-title">Latemar</h2>
-            <button class="main__gallery-like-button button">
-              <img
-                class="main__gallery-like-icon"
-                src="./images/Vector-like.svg"
-                alt="Like Icon"
-              />
-            </button>
-          </div>
-        </div>
-        <div class="main__gallery-item">
-          <img
-            class="main__gallery-image"
-            src="./images/kirill-pershin-5.jpg"
-            alt="A warm sun sets on the horizon, casting shadows and golden light over distant mountains. The soft layering of the hills fades into the distance, evoking calm and closure. The scene glows with the perfect end of day, inviting quiet thought and gratitude for natural beauty."
-          />
-          <div class="main__gallery-info">
-            <h2 class="main__gallery-photo-title">Bald Mountains</h2>
-            <button class="main__gallery-like-button button">
-              <img
-                class="main__gallery-like-icon"
-                src="./images/Vector-like.svg"
-                alt="Like Icon"
-              />
-            </button>
-          </div>
-        </div>
-        <div class="main__gallery-item">
-          <img
-            class="main__gallery-image"
-            src="./images/kirill-pershin-6.jpg"
-            alt="A snowy mountain is perfectly reflected in a calm lake at dawn. The sun’s pink light touches the summit, blending beautifully with the pale blue sky. This photo captures the precise moment between night and day—silent, majestic, and perfectly composed. Nature in balance and harmony."
-          />
-          <div class="main__gallery-info">
-            <h2 class="main__gallery-photo-title">Vanoise National Park</h2>
-            <button class="main__gallery-like-button button button_like-active">
-              <img
-                class="main__gallery-like-icon"
-                src="./images/Vector-like.svg"
-                alt="Like Icon"
-              />
-            </button>
-          </div>
-        </div>
+        </template>
       </section>
     </main>
     <footer class="footer">
