@@ -1,4 +1,4 @@
-.popup_opened {
+.popup_closed {
   display: none;
 }
 
@@ -102,7 +102,7 @@
 
 
 
-.image-popup_opened {
+.image-popup_closed {
   display: none;
 }
 
