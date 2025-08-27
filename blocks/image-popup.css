@@ -1,0 +1,52 @@
+.image-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.image-popup__container {
+  position: relative;
+  height: fit-content;
+  width: fit-content;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.image-popup__image {
+  display: block;
+  max-width: 75vw;
+  max-height: 75vh;
+}
+
+.image-popup__title {
+  position: absolute;
+  bottom: -35px;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #fff;
+  z-index: 4;
+}
+
+.image-popup__close-button {
+  position: absolute;
+  top: -35px;
+  right: -30px;
+  width: 30px;
+  height: 30px;
+  z-index: 5;
+}
+
+.image-popup__close-icon{
+  width: 30px;
+  height: 30px;
+}
+
+.image-popup_closed {
+  display: none;
+}
