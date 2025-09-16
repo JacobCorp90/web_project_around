@@ -106,6 +106,7 @@ function handleProfileFormSubmit(evt) {
 const addImagePopup = document.querySelector(".add-image-popup");
 const addButton = document.querySelector(".header__add-button");
 addButton.addEventListener("click", function () {
+  resetAddImagePopupFormState();
   addImagePopup.classList.remove("add-image-popup_closed");
 });
 
