@@ -60,14 +60,13 @@ initialCards.forEach((card) => {
     linkImage.style.cursor = "pointer";
   });
 
-   linkImage.addEventListener("click", () => {
+  linkImage.addEventListener("click", () => {
     console.log("Image clicked");
     imagePopup.classList.remove("image-popup_closed");
     imagePopupLarge.src = linkImage.src;
     imagePopupLarge.alt = linkImage.alt;
     imagePopupLargeTitle.textContent = nameImage.textContent;
   });
-
 });
 
 // Botón para editar perfil //
@@ -89,7 +88,7 @@ closeButton.addEventListener("click", function () {
   popup.classList.add("popup_closed");
 });
 // Función para manejar el envío del formulario//
-const formElement = document.querySelector(".popup__container");
+const formElement = document.querySelector(".popup__form");
 formElement.addEventListener("submit", handleProfileFormSubmit);
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -114,7 +113,7 @@ addButton.addEventListener("click", function () {
 
 const titleInput = document.querySelector(".add-image-popup__input_title");
 const urlInput = document.querySelector(".add-image-popup__input_url");
-const imageFormElement = document.querySelector(".add-image-popup__container");
+const imageFormElement = document.querySelector(".add-image-popup__form");
 const imagePopup = document.querySelector(".image-popup");
 const imagePopupLarge = document.querySelector(".image-popup__image");
 const imagePopupLargeTitle = document.querySelector(".image-popup__title");
@@ -175,4 +174,138 @@ const imagePopupCloseButton = document.querySelector(
 );
 imagePopupCloseButton.addEventListener("click", function () {
   imagePopup.classList.add("image-popup_closed");
+});
+
+// Validación formulario 1 //
+
+const popupForm = document.querySelector(".popup__form");
+const inputsPopupForm = Array.from(popupForm.querySelectorAll(".popup__input"));
+const saveButtonPopupForm = popupForm.querySelector(".popup__save-button");
+
+const getPopupErrorElement = (inputsPopupForm) =>
+  inputsPopupForm.nextElementSibling;
+
+const showPopupInputError = (input) => {
+  const errorPopupEl = getPopupErrorElement(input);
+  input.classList.add("popup__input_type_error");
+  errorPopupEl.textContent = input.validationMessage;
+  errorPopupEl.classList.add("popup__input-error_active");
+};
+
+const hidePopupInputError = (input) => {
+  const errorPopupEl = getPopupErrorElement(input);
+  input.classList.remove("popup__input_type_error");
+  errorPopupEl.textContent = "";
+  errorPopupEl.classList.remove("popup__input-error_active");
+};
+
+const checkPopupField = (input) => {
+  if (!input.validity.valid) {
+    showPopupInputError(input);
+  } else {
+    hidePopupInputError(input);
+  }
+};
+
+const updatePopupSubmitState = () => {
+  saveButtonPopupForm.disabled = !popupForm.checkValidity();
+};
+
+const resetPopupFormState = () => {
+  inputsPopupForm.forEach(hidePopupInputError);
+  popupForm.reset();
+  saveButtonPopupForm.disabled = true;
+};
+
+inputsPopupForm.forEach((input) => {
+  input.addEventListener("input", () => {
+    checkPopupField(input);
+    updatePopupSubmitState();
+  });
+
+  input.addEventListener("blur", () => {
+    checkPopupField(input);
+    updatePopupSubmitState();
+  });
+});
+
+popupForm.addEventListener("submit", (e) => {
+  if (!popupForm.checkValidity()) {
+    e.preventDefault();
+    inputsPopupForm.forEach(checkField);
+    updatePopupSubmitState();
+    return;
+  }
+
+  popup.classList.add("popup_closed");
+  resetPopupFormState();
+});
+
+// Validación formulario 2 //
+
+const imagePopupForm = document.querySelector(".add-image-popup__form");
+const inputsAddImagePopupForm = Array.from(
+  imagePopupForm.querySelectorAll(".add-image-popup__input")
+);
+const saveButtonAddImagePopupForm = imagePopupForm.querySelector(
+  ".add-image-popup__save-button"
+);
+
+const getAddImagePopupErrorElement = (inputsAddImagePopupForm) =>
+  inputsAddImagePopupForm.nextElementSibling;
+
+const showAddImagePopupInputError = (input) => {
+  const errorAddImagePopupEl = getAddImagePopupErrorElement(input);
+  input.classList.add("add-image-popup__input_type_error");
+  errorAddImagePopupEl.textContent = input.validationMessage;
+  errorAddImagePopupEl.classList.add("add-image-popup__input-error_active");
+};
+
+const hideAddImagePopupInputError = (input) => {
+  const errorAddImagePopupEl = getAddImagePopupErrorElement(input);
+  input.classList.remove("add-image-popup__input_type_error");
+  errorAddImagePopupEl.textContent = "";
+  errorAddImagePopupEl.classList.remove("add-image-popup__input-error_active");
+};
+
+const checkAddImagePopupField = (input) => {
+  if (!input.validity.valid) {
+    showAddImagePopupInputError(input);
+  } else {
+    hideAddImagePopupInputError(input);
+  }
+};
+
+const updateAddImagePopupSubmitState = () => {
+  saveButtonAddImagePopupForm.disabled = !imagePopupForm.checkValidity();
+};
+
+const resetAddImagePopupFormState = () => {
+  inputsAddImagePopupForm.forEach(hideAddImagePopupInputError);
+  imagePopupForm.reset();
+  saveButtonAddImagePopupForm.disabled = true;
+};
+
+inputsAddImagePopupForm.forEach((input) => {
+  input.addEventListener("input", () => {
+    checkAddImagePopupField(input);
+    updateAddImagePopupSubmitState();
+  });
+
+  input.addEventListener("blur", () => {
+    checkAddImagePopupField(input);
+    updateAddImagePopupSubmitState();
+  });
+});
+
+imagePopupForm.addEventListener("submit", (e) => {
+  if (!imagePopupForm.checkValidity()) {
+    e.preventDefault();
+    inputsAddImagePopupForm.forEach(checkAddImagePopupField);
+    updateAddImagePopupSubmitState();
+    return;
+  }
+
+  addImagePopup.classList.add("add-image-popup_closed");
+  resetAddImagePopupFormState();
 });
