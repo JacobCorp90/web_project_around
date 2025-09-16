@@ -89,7 +89,7 @@
 
 .popup__save-button:disabled {
   cursor: not-allowed;
-  border: 2px, solid, #ccc;
+  border: 2px solid #ccc;
   background-color: #fff;
   color: #ccc;
 }
