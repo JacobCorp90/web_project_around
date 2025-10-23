@@ -135,6 +135,12 @@ function handleImageFormSubmit(evt) {
   gallery.prepend(cardElement);
   addImagePopup.classList.add("add-image-popup_closed");
 
+  const likeButton = cardElement.querySelector(".main__gallery-like-button");
+likeButton.addEventListener("click", () => {
+  likeButton.classList.toggle("main__gallery-like-button_active");
+});
+
+
   linkImage.addEventListener("mouseover", () => {
     linkImage.style.cursor = "pointer";
   });
