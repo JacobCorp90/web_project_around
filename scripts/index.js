@@ -1,4 +1,11 @@
-// Inicializa el array de tarjetas con los datos proporcionados//
+import Card from "./card.js";
+import { openImagePopup, closePopup } from "./utils.js";
+import {
+  enableValidation,
+  resetAddImagePopupFormState,
+} from "./formValidator.js";
+
+// Array de tarjetas
 
 const initialCards = [
   {
@@ -27,47 +34,43 @@ const initialCards = [
   },
 ];
 
-const template = document.querySelector("#card-template").content;
 const gallery = document.querySelector(".main__gallery");
+const templateSelector = "#card-template";
 
-initialCards.forEach((card) => {
-  const cardElement = template
-    .querySelector(".main__gallery-item")
-    .cloneNode(true);
-  const nameImage = cardElement.querySelector(".main__gallery-photo-title");
-  const linkImage = cardElement.querySelector(".main__gallery-image");
-  const deleteButton = cardElement.querySelector(
-    ".main__gallery-delete-button"
-  );
-
-  nameImage.textContent = card.name;
-  linkImage.src = card.link;
-  linkImage.alt = card.name;
-
+initialCards.forEach((data) => {
+  const card = new Card(data, templateSelector, {
+    onImageClick: ({ src, alt, title }) => openImagePopup({ src, alt, title }),
+  });
+  const cardElement = card.generateCard();
   gallery.append(cardElement);
-
-  deleteButton.addEventListener("click", () => {
-    console.log("Delete button clicked");
-    cardElement.remove();
-  });
-
-  const likeButton = cardElement.querySelector(".main__gallery-like-button");
-  likeButton.addEventListener("click", () => {
-    likeButton.classList.toggle("main__gallery-like-button_active");
-  });
-
-  linkImage.addEventListener("mouseover", () => {
-    linkImage.style.cursor = "pointer";
-  });
-
-  linkImage.addEventListener("click", () => {
-    console.log("Image clicked");
-    imagePopup.classList.remove("image-popup_closed");
-    imagePopupLarge.src = linkImage.src;
-    imagePopupLarge.alt = linkImage.alt;
-    imagePopupLargeTitle.textContent = nameImage.textContent;
-  });
 });
+// Función para cerrar el popup de imagen
+function enableImageClose() {
+  const popup = document.querySelector(".image-popup");
+  const closeBtn = popup.querySelector(".image-popup__close-button");
+
+  // Botón X
+  closeBtn.addEventListener("click", () => closePopup(popup));
+
+  // Clic fuera de la imagen
+  popup.addEventListener("mousedown", (evt) => {
+    if (evt.target === popup) {
+      closePopup(popup);
+    }
+  });
+
+  // ESC
+  document.addEventListener("keydown", (evt) => {
+    if (
+      evt.key === "Escape" &&
+      !popup.classList.contains("image-popup_closed")
+    ) {
+      closePopup(popup);
+    }
+  });
+}
+
+enableImageClose();
 
 // Botón para editar perfil //
 const editButton = document.querySelector(".header__edit-button");
@@ -111,86 +114,29 @@ addButton.addEventListener("click", function () {
 const titleInput = document.querySelector(".add-image-popup__input_title");
 const urlInput = document.querySelector(".add-image-popup__input_url");
 const imageFormElement = document.querySelector(".add-image-popup__form");
-const imagePopup = document.querySelector(".image-popup");
-const imagePopupLarge = document.querySelector(".image-popup__image");
-const imagePopupLargeTitle = document.querySelector(".image-popup__title");
 imageFormElement.addEventListener("submit", handleImageFormSubmit);
 
 function handleImageFormSubmit(evt) {
   evt.preventDefault();
 
-  const cardElement = template
-    .querySelector(".main__gallery-item")
-    .cloneNode(true);
-  const nameImage = cardElement.querySelector(".main__gallery-photo-title");
-  const linkImage = cardElement.querySelector(".main__gallery-image");
-  const deleteButton = cardElement.querySelector(
-    ".main__gallery-delete-button"
-  );
+  const data = {
+    name: titleInput.value.trim(),
+    link: urlInput.value.trim(),
+  };
 
-  nameImage.textContent = titleInput.value;
-  linkImage.src = urlInput.value;
-  linkImage.alt = titleInput.value;
+  const newCard = new Card(data, templateSelector, {
+    onImageClick: ({ src, alt, title }) => openImagePopup({ src, alt, title }),
+  });
+  const cardElement = newCard.generateCard();
 
   gallery.prepend(cardElement);
+
+  // Cierra el popup y limpia el form/errores
   addImagePopup.classList.add("add-image-popup_closed");
-
-  const likeButton = cardElement.querySelector(".main__gallery-like-button");
-likeButton.addEventListener("click", () => {
-  likeButton.classList.toggle("main__gallery-like-button_active");
-});
-
-
-  linkImage.addEventListener("mouseover", () => {
-    linkImage.style.cursor = "pointer";
-  });
-
-  linkImage.addEventListener("click", () => {
-    console.log("Image clicked");
-    imagePopup.classList.remove("image-popup_closed");
-    imagePopupLarge.src = linkImage.src;
-    imagePopupLarge.alt = linkImage.alt;
-    imagePopupLargeTitle.textContent = nameImage.textContent;
-  });
-
   titleInput.value = "";
   urlInput.value = "";
 
-  deleteButton.addEventListener("click", () => {
-    cardElement.remove();
-  });
-}
-/*
-// Botón para cerrar el popup de agregar imagen //
-
-const imageCloseButton = document.querySelector(
-  ".add-image-popup__close-button"
-);
-imageCloseButton.addEventListener("click", function () {
-  addImagePopup.classList.add("add-image-popup_closed");
-});
-
-// Botón para cerrar el popup de imagen grande //
-
-const imagePopupCloseButton = document.querySelector(
-  ".image-popup__close-button"
-);
-imagePopupCloseButton.addEventListener("click", function () {
-  imagePopup.classList.add("image-popup_closed");
-});
-*/
-// Función para cerrar popups //
-
-function closePopup(popupElement) {
-  if (popupElement.classList.contains("popup")) {
-    popupElement.classList.add("popup_closed");
-  }
-  if (popupElement.classList.contains("add-image-popup")) {
-    popupElement.classList.add("add-image-popup_closed");
-  }
-  if (popupElement.classList.contains("image-popup")) {
-    popupElement.classList.add("image-popup_closed");
-  }
+  resetAddImagePopupFormState();
 }
 
 // Función para cerrar el primer formulario //
@@ -211,12 +157,14 @@ function enableProfilePopupClose() {
 
   // esc //
   document.addEventListener("keydown", (evt) => {
-    if (evt.key === "Escape" && !profilePopup.classList.contains("popup_closed")) {
+    if (
+      evt.key === "Escape" &&
+      !profilePopup.classList.contains("popup_closed")
+    ) {
       closePopup(profilePopup);
     }
   });
 }
-
 
 enableProfilePopupClose();
 
@@ -224,7 +172,9 @@ enableProfilePopupClose();
 
 function enableImagePopupClose() {
   const imagePopup = document.querySelector(".add-image-popup");
-  const imagePopupCloseBtn = imagePopup.querySelector(".add-image-popup__close-button");
+  const imagePopupCloseBtn = imagePopup.querySelector(
+    ".add-image-popup__close-button"
+  );
 
   // botón //
   imagePopupCloseBtn.addEventListener("click", () => closePopup(imagePopup));
@@ -238,39 +188,16 @@ function enableImagePopupClose() {
 
   // esc //
   document.addEventListener("keydown", (evt) => {
-    if (evt.key === "Escape" && !imagePopup.classList.contains("add-image-popup_closed")) {
+    if (
+      evt.key === "Escape" &&
+      !imagePopup.classList.contains("add-image-popup_closed")
+    ) {
       closePopup(imagePopup);
     }
   });
 }
 
 enableImagePopupClose();
-
-// Función para cerrar el popup de imagen grande //
-
-function enableImageClose() {
-  const image = document.querySelector(".image-popup");
-  const imageCloseBtn = image.querySelector(".image-popup__close-button");
-
-  // botón //
-  imageCloseBtn.addEventListener("click", () => closePopup(image));
-
-  // click afuera //
-  image.addEventListener("mousedown", (evt) => {
-    if (evt.target === image) {
-      closePopup(image);
-    }
-  });
-
-  // esc //
-  document.addEventListener("keydown", (evt) => {
-    if (evt.key === "Escape" && !image.classList.contains("image-popup_closed")) {
-      closePopup(image);
-    }
-  });
-}
-
-enableImageClose();
 
 // Validación formulario 1 //
 
@@ -280,7 +207,7 @@ enableValidation({
   submitButtonSelector: ".popup__save-button",
   inactiveButtonClass: "popup__save-button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_active"
+  errorClass: "popup__input-error_active",
 });
 
 // Validación formulario 2 //
@@ -291,5 +218,5 @@ enableValidation({
   submitButtonSelector: ".add-image-popup__save-button",
   inactiveButtonClass: "add-image-popup__save-button_disabled",
   inputErrorClass: "add-image-popup__input_type_error",
-  errorClass: "add-image-popup__input-error_active"
+  errorClass: "add-image-popup__input-error_active",
 });

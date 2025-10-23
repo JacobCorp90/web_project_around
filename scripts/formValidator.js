@@ -1,4 +1,4 @@
-function enableValidation(config) {
+export function enableValidation(config) {
   const forms = Array.from(document.querySelectorAll(config.formSelector));
 
   forms.forEach((form) => {
@@ -58,7 +58,7 @@ function enableValidation(config) {
 
 // Resetear estado del formulario Add Image //
 
-function resetAddImagePopupFormState() {
+export function resetAddImagePopupFormState() {
   const form = document.querySelector(".add-image-popup__form");
   if (!form) return;
 
