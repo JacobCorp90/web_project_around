@@ -1,3 +1,79 @@
+// formValidator.js
+export default class FormValidator {
+  constructor(config, formElement) {
+    this._config = config;
+    this._form = formElement;
+    this._inputs = Array.from(this._form.querySelectorAll(config.inputSelector));
+    this._button = this._form.querySelector(config.submitButtonSelector);
+  }
+
+  // Método público para activar la validación
+  enableValidation() {
+    this._toggleButtonState();
+    this._setEventListeners();
+  }
+
+  // Método público para limpiar errores y reiniciar el formulario
+  resetValidation() {
+    this._inputs.forEach((input) => {
+      this._hideInputError(input);
+    });
+
+    this._form.reset();
+    this._toggleButtonState(true);
+  }
+
+  // Detectores de eventos por input
+  _setEventListeners() {
+    this._inputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        this._checkInputValidity(input);
+        this._toggleButtonState();
+      });
+
+      input.addEventListener("blur", () => {
+        this._checkInputValidity(input);
+      });
+    });
+  }
+
+  // Verifica un input específico
+  _checkInputValidity(input) {
+    const errorEl = input.nextElementSibling;
+    if (!input.validity.valid) {
+      input.classList.add(this._config.inputErrorClass);
+      if (errorEl) {
+        errorEl.textContent = input.validationMessage;
+        errorEl.classList.add(this._config.errorClass);
+      }
+    } else {
+      this._hideInputError(input);
+    }
+  }
+
+  // Oculta el mensaje de error
+  _hideInputError(input) {
+    const errorEl = input.nextElementSibling;
+    input.classList.remove(this._config.inputErrorClass);
+    if (errorEl) {
+      errorEl.textContent = "";
+      errorEl.classList.remove(this._config.errorClass);
+    }
+  }
+
+  // Activa o desactiva el botón según la validez del formulario
+  _toggleButtonState(forceDisable = false) {
+    const shouldDisable = forceDisable || !this._form.checkValidity();
+    this._button.disabled = shouldDisable;
+  }
+}
+
+
+
+  /*
+
+
+
 export function enableValidation(config) {
   const forms = Array.from(document.querySelectorAll(config.formSelector));
 
@@ -81,3 +157,6 @@ export function resetAddImagePopupFormState() {
     button.classList.add("add-image-popup__save-button_disabled"); // si tienes estilo para deshabilitado
   }
 }
+
+
+*/

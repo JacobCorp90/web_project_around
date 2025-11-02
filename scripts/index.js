@@ -1,12 +1,8 @@
 import Card from "./card.js";
+import FormValidator from "./formValidator.js";
 import { openImagePopup, closePopup } from "./utils.js";
-import {
-  enableValidation,
-  resetAddImagePopupFormState,
-} from "./formValidator.js";
 
-// Array de tarjetas
-
+// Tarjetas iniciales
 const initialCards = [
   {
     name: "Valle de Yosemite",
@@ -44,7 +40,8 @@ initialCards.forEach((data) => {
   const cardElement = card.generateCard();
   gallery.append(cardElement);
 });
-// Función para cerrar el popup de imagen
+
+// Cierre de popup de imagen
 function enableImageClose() {
   const popup = document.querySelector(".image-popup");
   const closeBtn = popup.querySelector(".image-popup__close-button");
@@ -52,11 +49,9 @@ function enableImageClose() {
   // Botón X
   closeBtn.addEventListener("click", () => closePopup(popup));
 
-  // Clic fuera de la imagen
+  // Click en overlay
   popup.addEventListener("mousedown", (evt) => {
-    if (evt.target === popup) {
-      closePopup(popup);
-    }
+    if (evt.target === popup) closePopup(popup);
   });
 
   // ESC
@@ -69,52 +64,70 @@ function enableImageClose() {
     }
   });
 }
-
 enableImageClose();
 
-// Botón para editar perfil //
+// Popup Edit Profile
 const editButton = document.querySelector(".header__edit-button");
-const popup = document.querySelector(".popup");
+const profilePopup = document.querySelector(".popup");
 const nameInput = document.querySelector(".popup__input_name");
 const aboutInput = document.querySelector(".popup__input_about");
 const nameDisplay = document.querySelector(".header__title");
 const aboutDisplay = document.querySelector(".header__subtitle");
 
-editButton.addEventListener("click", function () {
+editButton.addEventListener("click", () => {
+  // Cargar placeholders actuales
   nameInput.placeholder = nameDisplay.textContent;
   aboutInput.placeholder = aboutDisplay.textContent;
-  popup.classList.remove("popup_closed");
+  profileValidator.resetValidation();
+  profilePopup.classList.remove("popup_closed");
 });
 
-// Función para manejar el envío del formulario//
-const formElement = document.querySelector(".popup__form");
-formElement.addEventListener("submit", handleProfileFormSubmit);
+// Submit del formulario de perfil
+const profileForm = document.querySelector(".popup__form");
+profileForm.addEventListener("submit", handleProfileFormSubmit);
+
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-
   nameDisplay.textContent = nameInput.value;
   aboutDisplay.textContent = aboutInput.value;
-  popup.classList.add("popup_closed");
-
-  nameInput.value = "";
-  aboutInput.value = "";
+  closePopup(profilePopup);
 }
 
-// Botón para agregar imagen //
+// Cierre: botón / overlay / ESC
+function enableProfilePopupClose() {
+  const closeBtn = profilePopup.querySelector(".popup__close-button");
 
+  closeBtn.addEventListener("click", () => closePopup(profilePopup));
+
+  profilePopup.addEventListener("mousedown", (evt) => {
+    if (evt.target === profilePopup) closePopup(profilePopup);
+  });
+
+  document.addEventListener("keydown", (evt) => {
+    if (
+      evt.key === "Escape" &&
+      !profilePopup.classList.contains("popup_closed")
+    ) {
+      closePopup(profilePopup);
+    }
+  });
+}
+enableProfilePopupClose();
+
+// Popup Add Image
 const addImagePopup = document.querySelector(".add-image-popup");
 const addButton = document.querySelector(".header__add-button");
-addButton.addEventListener("click", function () {
-  resetAddImagePopupFormState();
+const addImageForm = document.querySelector(".add-image-popup__form");
+const titleInput = document.querySelector(".add-image-popup__input_title");
+const urlInput = document.querySelector(".add-image-popup__input_url");
+
+addButton.addEventListener("click", () => {
+  addImageValidator.resetValidation();
   addImagePopup.classList.remove("add-image-popup_closed");
 });
 
-// Pop Up nueva imagen //
-
-const titleInput = document.querySelector(".add-image-popup__input_title");
-const urlInput = document.querySelector(".add-image-popup__input_url");
-const imageFormElement = document.querySelector(".add-image-popup__form");
-imageFormElement.addEventListener("submit", handleImageFormSubmit);
+// Submit del formulario de nueva imagen
+addImageForm.addEventListener("submit", handleImageFormSubmit);
 
 function handleImageFormSubmit(evt) {
   evt.preventDefault();
@@ -127,96 +140,56 @@ function handleImageFormSubmit(evt) {
   const newCard = new Card(data, templateSelector, {
     onImageClick: ({ src, alt, title }) => openImagePopup({ src, alt, title }),
   });
-  const cardElement = newCard.generateCard();
 
+  const cardElement = newCard.generateCard();
   gallery.prepend(cardElement);
 
-  // Cierra el popup y limpia el form/errores
-  addImagePopup.classList.add("add-image-popup_closed");
-  titleInput.value = "";
-  urlInput.value = "";
-
-  resetAddImagePopupFormState();
+  closePopup(addImagePopup);
+  addImageValidator.resetValidation(); // deja el form listo para la próxima vez
 }
 
-// Función para cerrar el primer formulario //
-
-function enableProfilePopupClose() {
-  const profilePopup = document.querySelector(".popup");
-  const closeBtn = profilePopup.querySelector(".popup__close-button");
-
-  // botón //
-  closeBtn.addEventListener("click", () => closePopup(profilePopup));
-
-  // click afuera //
-  profilePopup.addEventListener("mousedown", (evt) => {
-    if (evt.target === profilePopup) {
-      closePopup(profilePopup);
-    }
-  });
-
-  // esc //
-  document.addEventListener("keydown", (evt) => {
-    if (
-      evt.key === "Escape" &&
-      !profilePopup.classList.contains("popup_closed")
-    ) {
-      closePopup(profilePopup);
-    }
-  });
-}
-
-enableProfilePopupClose();
-
-// Función para cerrar el segundo formulario //
-
+// Cierre: botón / overlay / ESC
 function enableImagePopupClose() {
-  const imagePopup = document.querySelector(".add-image-popup");
-  const imagePopupCloseBtn = imagePopup.querySelector(
+  const closeBtn = addImagePopup.querySelector(
     ".add-image-popup__close-button"
   );
 
-  // botón //
-  imagePopupCloseBtn.addEventListener("click", () => closePopup(imagePopup));
+  closeBtn.addEventListener("click", () => closePopup(addImagePopup));
 
-  // click afuera //
-  imagePopup.addEventListener("mousedown", (evt) => {
-    if (evt.target === imagePopup) {
-      closePopup(imagePopup);
-    }
+  addImagePopup.addEventListener("mousedown", (evt) => {
+    if (evt.target === addImagePopup) closePopup(addImagePopup);
   });
 
-  // esc //
   document.addEventListener("keydown", (evt) => {
     if (
       evt.key === "Escape" &&
-      !imagePopup.classList.contains("add-image-popup_closed")
+      !addImagePopup.classList.contains("add-image-popup_closed")
     ) {
-      closePopup(imagePopup);
+      closePopup(addImagePopup);
     }
   });
 }
-
 enableImagePopupClose();
 
-// Validación formulario 1 //
+// FormValidator
+const profileValidator = new FormValidator(
+  {
+    inputSelector: ".popup__input",
+    submitButtonSelector: ".popup__save-button",
+    inputErrorClass: "popup__input_type_error",
+    errorClass: "popup__input-error_active",
+  },
+  profileForm
+);
+profileValidator.enableValidation();
 
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__save-button",
-  inactiveButtonClass: "popup__save-button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_active",
-});
-
-// Validación formulario 2 //
-
-enableValidation({
-  formSelector: ".add-image-popup__form",
-  inputSelector: ".add-image-popup__input",
-  submitButtonSelector: ".add-image-popup__save-button",
-  inactiveButtonClass: "add-image-popup__save-button_disabled",
-  inputErrorClass: "add-image-popup__input_type_error",
-  errorClass: "add-image-popup__input-error_active",
-});
+const addImageValidator = new FormValidator(
+  {
+    inputSelector: ".add-image-popup__input",
+    submitButtonSelector: ".add-image-popup__save-button",
+    inputErrorClass: "add-image-popup__input_type_error",
+    errorClass: "add-image-popup__input-error_active",
+  },
+  addImageForm
+);
+addImageValidator.enableValidation();
