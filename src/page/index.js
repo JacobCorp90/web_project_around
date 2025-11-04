@@ -70,11 +70,11 @@ const addImagePopupSelector = ".add-image-popup";
 const profileFormEl = document.querySelector(".popup__form");
 const addImageFormEl = document.querySelector(".add-image-popup__form");
 
-const nameInput = document.querySelector(".popup__input_name");
-const aboutInput = document.querySelector(".popup__input_about");
+const nameInput = document.querySelector(".popup__input_type_name");
+const aboutInput = document.querySelector(".popup__input_type_about");
 
-const titleInput = document.querySelector(".add-image-popup__input_title");
-const urlInput = document.querySelector(".add-image-popup__input_url");
+const titleInput = document.querySelector(".add-image-popup__input_type_title");
+const urlInput = document.querySelector(".add-image-popup__input_type_url");
 
 // 5) Popup editar perfil
 const editProfilePopup = new PopupWithForm(profilePopupSelector, (formData) => {
