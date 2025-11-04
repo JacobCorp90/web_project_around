@@ -57,7 +57,9 @@
                     maxlength="40"
                     required
                   />
-                  <span class="popup__input-error popup__input_name-error"></span>
+                  <span
+                    class="popup__input-error popup__input_name-error"
+                  ></span>
                   <input
                     class="popup__input popup__input_about"
                     type="text"
@@ -67,8 +69,12 @@
                     maxlength="200"
                     required
                   />
-                  <span class="popup__input-error popup__input_about-error"></span>
-                  <button class="popup__save-button" type="submit" disabled>Save</button>
+                  <span
+                    class="popup__input-error popup__input_about-error"
+                  ></span>
+                  <button class="popup__save-button" type="submit" disabled>
+                    Save
+                  </button>
                 </form>
               </div>
               <div class="add-image-popup add-image-popup_closed">
@@ -88,21 +94,29 @@
                     class="add-image-popup__input add-image-popup__input_title"
                     type="text"
                     placeholder="Title"
-                    name="Title"
+                    name="name"
                     minlength="2"
                     maxlength="30"
                     required
                   />
-                  <span class="add-image-popup__input-error add-image-popup__input_title-error"></span>
+                  <span
+                    class="add-image-popup__input-error add-image-popup__input_title-error"
+                  ></span>
                   <input
                     class="add-image-popup__input add-image-popup__input_url"
                     type="url"
                     placeholder="Image URL"
-                    name="Image URL"
+                    name="link"
                     required
                   />
-                  <span class="add-image-popup__input-error add-image-popup__input_url-error"></span>
-                  <button class="add-image-popup__save-button" type="submit" disabled>
+                  <span
+                    class="add-image-popup__input-error add-image-popup__input_url-error"
+                  ></span>
+                  <button
+                    class="add-image-popup__save-button"
+                    type="submit"
+                    disabled
+                  >
                     Save
                   </button>
                 </form>
@@ -125,7 +139,7 @@
       <section class="main__gallery">
         <template id="card-template">
           <div class="main__gallery-item">
-            <img class="main__gallery-image" src="" alt="" />
+            <img class="main__gallery-image" src=" " alt=" " />
             <button class="main__gallery-delete-button button">
               <img
                 class="main__gallery-delete-icon"
@@ -141,7 +155,7 @@
         </template>
         <div class="image-popup image-popup_closed">
           <div class="image-popup__container">
-            <img class="image-popup__image" src=" " alt=" "/>
+            <img class="image-popup__image" src=" " alt=" " />
             <h2 class="image-popup__title"></h2>
             <button class="image-popup__close-button button" type="button">
               <img
@@ -159,7 +173,6 @@
         <p class="footer__copyright">&copy; 2025 Jacobo Cortés R.</p>
       </div>
     </footer>
-    <script type="module" src="./components/FormValidator.js"></script>
-    <script type="module" src="./components/index.js"></script>
+    <script type="module" src="./page/index.js"></script>
   </body>
 </html>
