@@ -102,6 +102,32 @@
   width: 22px;
 }
 
+.header__profile-image-container {
+  position: relative;
+
+}
+
+.header__change-image-button {
+  position: absolute;
+  bottom: 47px;
+  right: 47px;
+  justify-content: center;
+  align-items: center;
+  width: 26px;
+  height: 26px;
+  margin: auto;
+  padding: 0;
+}
+
+.header__change-image-button_closed {
+  display: none;
+}
+
+.header__change-image-icon {
+  width: 26px;
+  height: 26px;
+}
+
 @media screen and (max-width: 1000px) {
   .header {
     padding-left: 8%;

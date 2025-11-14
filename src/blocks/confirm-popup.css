@@ -1,4 +1,4 @@
-.change-profile-image-popup {
+.confirm-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,7 +8,7 @@
   z-index: 2;
 }
 
-.change-profile-image-popup__form {
+.confirm-popup__container {
   position: relative;
   top: 50%;
   left: 50%;
@@ -23,7 +23,7 @@
   border-radius: 10px;
 }
 
-.change-profile-image-popup__close-button {
+.confirm-popup__close-button {
   align-self: end;
   position: absolute;
   top: -50px;
@@ -32,22 +32,22 @@
   height: 40px;
 }
 
-.change-profile-image-popup__close-icon {
+.confirm-popup__close-icon {
   width: 40px;
   height: 40px;
 }
 
-.change-profile-image-popup__title {
+.confirm-popup__title {
   font-family: "Inter-Black", Arial, sans-serif;
   font-size: 24px;
   line-height: 1.2;
   color: #000;
   align-self: flex-start;
   margin: 0;
-  padding-bottom: 54px;
+  padding-bottom: 38px;
 }
 
-.change-profile-image-popup__input {
+.confirm-popup__input {
   font-family: "Inter", Arial, sans-serif;
   font-size: 14px;
   line-height: 1.2;
@@ -58,11 +58,11 @@
   border-bottom: 2px solid #c4c4c4;
 }
 
-.change-profile-image-popup__input::placeholder {
+.confirm-popup__input::placeholder {
   color: #c4c4c4;
 }
 
-.change-profile-image-popup__save-button {
+.confirm-popup__save-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,20 +76,20 @@
   border-radius: 2px;
   border: none;
   cursor: pointer;
-  margin-top: 45px;
+  margin-top: 0;
 }
 
-.change-profile-image-popup__save-button:hover {
+.confirm-popup__save-button:hover {
   opacity: 0.8;
 }
-.change-profile-image-popup__save-button:disabled {
+.confirm-popup__save-button:disabled {
   cursor: not-allowed;
   border: 2px solid #ccc;
   background-color: #fff;
   color: #ccc;
 }
 
-.change-profile-image-popup__input-error {
+.confirm-popup__input-error {
   display: none;
   font-family: "Inter", Arial, sans-serif;
   color: red;
@@ -98,23 +98,22 @@
   margin-right: auto;
 }
 
-.change-profile-image-popup__input_type_error {
+.confirm-popup__input_type_error {
   border-bottom: 2px solid red;
 }
-.change-profile-image-popup__input-error_active {
+.confirm-popup__input-error_active {
   display: block;
 }
 
 @media screen and (max-width: 850px) {
-  .change-profile-image-popup__form {
+  .confirm-popup__container {
     margin-right: 15%;
   }
 
-  .change-profile-image-popup__close-button {
+  .confirm-popup__close-button {
     top: -50px;
     right: 26px;
     width: 26px;
     height: 26px;
   }
-
 }

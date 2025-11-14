@@ -23,11 +23,20 @@
           <img class="header__logo" src="./images/Vector-logo.svg" alt="Logo" />
         </div>
         <div class="header__profile-container">
-          <img
+          <div class="header__profile-image-container">
+            <img
             class="header__profile-image"
             src="./images/profile-image.jpg"
             alt="Profile Image"
-          />
+            />
+            <button class="header__change-image-button header__change-image-button_closed button">
+            <img
+              class="header__change-image-icon"
+              src="./images/Edit-Profile-Image-Icon.png"
+              alt="Change Image Icon"
+            />
+          </div>
+
           <div class="header__profile-info">
             <div class="header__title-container">
               <h1 class="header__title">Jacques Cousteau</h1>
@@ -38,7 +47,7 @@
                   alt="Edit Icon"
                 />
               </button>
-              // Popup edit profile
+              <!-- Popup edit profile -->
               <div class="popup popup_closed">
                 <form class="popup__form">
                   <button class="popup__close-button button" type="button">
@@ -78,13 +87,10 @@
                   </button>
                 </form>
               </div>
-              // Popup add image
+              <!-- Popup add image -->
               <div class="popup popup_closed add-image-popup">
                 <form class="add-image-popup__form" novalidate>
-                  <button
-                    class="popup__close-button button"
-                    type="button"
-                  >
+                  <button class="popup__close-button button" type="button">
                     <img
                       class="add-image-popup__close-icon"
                       src="./images/Close-Icon.png"
@@ -124,33 +130,20 @@
                 </form>
               </div>
 
-              // Popup change profile image
+              <!-- Popup change image profile -->
 
               <div class="popup popup_closed change-profile-image-popup">
                 <form class="change-profile-image-popup__form" novalidate>
-                  <button
-                    class="popup__close-button button"
-                    type="button"
-                  >
+                  <button class="popup__close-button button" type="button">
                     <img
                       class="change-profile-image-popup__close-icon"
                       src="./images/Close-Icon.png"
                       alt="Close Icon"
                     />
                   </button>
-                  <h2 class="change-profile-image-popup__title">New place</h2>
-                  <input
-                    class="change-profile-image-popup__input change-profile-image-popup__input_type_title"
-                    type="text"
-                    placeholder="Title"
-                    name="name"
-                    minlength="2"
-                    maxlength="30"
-                    required
-                  />
-                  <span
-                    class="change-profile-image-popup__input-error change-profile-image-popup__input-error_type_title"
-                  ></span>
+                  <h2 class="change-profile-image-popup__title">
+                    Change profile image
+                  </h2>
                   <input
                     class="change-profile-image-popup__input change-profile-image-popup__input_type_url"
                     type="url"
@@ -170,9 +163,28 @@
                   </button>
                 </form>
               </div>
-
+              <!-- Popup confirm delete -->
+              <div class="popup popup_closed confirm-popup">
+                <div class="confirm-popup__container">
+                  <button class="popup__close-button button" type="button">
+                    <img
+                      class="confirm-popup__close-icon"
+                      src="./images/Close-Icon.png"
+                      alt="Close Icon"
+                    />
+                  </button>
+                  <h2 class="confirm-popup__title">
+                    Are you sure?
+                  </h2>
+                  <button
+                    class="confirm-popup__save-button"
+                    type="submit"
+                    >
+                    Yes
+                  </button>
+                </div>
+              </div>
             </div>
-
             <p class="header__subtitle">Explorer</p>
           </div>
           <button class="header__add-button button">
