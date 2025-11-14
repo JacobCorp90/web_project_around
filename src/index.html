@@ -38,6 +38,7 @@
                   alt="Edit Icon"
                 />
               </button>
+              // Popup edit profile
               <div class="popup popup_closed">
                 <form class="popup__form">
                   <button class="popup__close-button button" type="button">
@@ -77,6 +78,7 @@
                   </button>
                 </form>
               </div>
+              // Popup add image
               <div class="popup popup_closed add-image-popup">
                 <form class="add-image-popup__form" novalidate>
                   <button
@@ -121,6 +123,54 @@
                   </button>
                 </form>
               </div>
+
+              // Popup change profile image
+
+              <div class="popup popup_closed change-profile-image-popup">
+                <form class="change-profile-image-popup__form" novalidate>
+                  <button
+                    class="popup__close-button button"
+                    type="button"
+                  >
+                    <img
+                      class="change-profile-image-popup__close-icon"
+                      src="./images/Close-Icon.png"
+                      alt="Close Icon"
+                    />
+                  </button>
+                  <h2 class="change-profile-image-popup__title">New place</h2>
+                  <input
+                    class="change-profile-image-popup__input change-profile-image-popup__input_type_title"
+                    type="text"
+                    placeholder="Title"
+                    name="name"
+                    minlength="2"
+                    maxlength="30"
+                    required
+                  />
+                  <span
+                    class="change-profile-image-popup__input-error change-profile-image-popup__input-error_type_title"
+                  ></span>
+                  <input
+                    class="change-profile-image-popup__input change-profile-image-popup__input_type_url"
+                    type="url"
+                    placeholder="Image URL"
+                    name="link"
+                    required
+                  />
+                  <span
+                    class="change-profile-image-popup__input-error change-profile-image-popup__input-error_type_url"
+                  ></span>
+                  <button
+                    class="change-profile-image-popup__save-button"
+                    type="submit"
+                    disabled
+                  >
+                    Save
+                  </button>
+                </form>
+              </div>
+
             </div>
 
             <p class="header__subtitle">Explorer</p>
