@@ -4,6 +4,7 @@ import Section from "../components/Section.js";
 import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithProfileImage from "../components/PopupWithProfileImage.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 
@@ -66,9 +67,16 @@ cardSection.renderer();
 // 4) Selectores de formularios/inputs
 const profilePopupSelector = ".popup";
 const addImagePopupSelector = ".add-image-popup";
+const changeProfileImagePopupSelector = ".change-profile-image-popup";
 
 const profileFormEl = document.querySelector(".popup__form");
 const addImageFormEl = document.querySelector(".add-image-popup__form");
+const changeProfileImageFormEl = document.querySelector(
+  ".change-profile-image-popup__form"
+);
+
+// Imagen de perfil en el header
+const profileImageElement = document.querySelector(".header__profile-image");
 
 const nameInput = document.querySelector(".popup__input_type_name");
 const aboutInput = document.querySelector(".popup__input_type_about");
@@ -123,7 +131,32 @@ addButton.addEventListener("click", () => {
   addImagePopup.open();
 });
 
-// 7) Validadores de formulario
+// 7) Popup cambiar foto de perfil (solo front, sin API)
+
+// Instancia del popup para cambiar la imagen de perfil
+const changeProfileImagePopup = new PopupWithProfileImage(
+  changeProfileImagePopupSelector,
+  ({ link }) => {
+    // Actualiza la imagen de perfil con la URL escrita en el input
+    profileImageElement.src = link;
+    changeProfileImagePopup.close();
+  }
+);
+
+changeProfileImagePopup.setEventListeners();
+
+// Botón que abre el popup (icono sobre la foto)
+const changeImageButton = document.querySelector(
+  ".header__change-image-button"
+);
+
+changeImageButton.addEventListener("click", () => {
+  // Resetea errores y desactiva el botón hasta que el input sea válido
+  changeProfileImageValidator.resetValidation();
+  changeProfileImagePopup.open();
+});
+
+// 8) Validadores de formulario
 
 const profileValidator = new FormValidator(
   {
@@ -146,3 +179,14 @@ const addImageValidator = new FormValidator(
   addImageFormEl
 );
 addImageValidator.enableValidation();
+
+const changeProfileImageValidator = new FormValidator(
+  {
+    inputSelector: ".change-profile-image-popup__input",
+    submitButtonSelector: ".change-profile-image-popup__save-button",
+    inputErrorClass: "change-profile-image-popup__input_type_error",
+    errorClass: "change-profile-image-popup__input-error_active",
+  },
+  changeProfileImageFormEl
+);
+changeProfileImageValidator.enableValidation();
