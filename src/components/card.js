@@ -1,5 +1,10 @@
 export default class Card {
-  constructor({ name, link }, templateSelector, handleCardClick) {
+  constructor(
+    { name, link },
+    templateSelector,
+    handleCardClick,
+    handleDeleteRequest
+  ) {
     // Datos principales de la tarjeta
     this._name = name;
     this._link = link;
@@ -9,6 +14,9 @@ export default class Card {
 
     // Callback para abrir la imagen en popup
     this._handleCardClick = handleCardClick;
+
+    // Callback para eliminar la tarjeta
+    this._handleDeleteRequest = handleDeleteRequest;
 
     // Referencia interna al elemento del DOM
     this._element = this._getTemplate();
@@ -38,7 +46,12 @@ export default class Card {
     this._likeBtn.addEventListener("click", () => this._toggleLike());
 
     // delete
-    this._deleteBtn.addEventListener("click", () => this._handleDelete());
+    this._deleteBtn.addEventListener("click", () => {
+      this._deleteBtn.blur(); // quitar foco del botón
+      if (this._handleDeleteRequest) {
+        this._handleDeleteRequest(this);
+      }
+    });
 
     // popup imagen
     this._imageEl.addEventListener("click", () => {
@@ -49,8 +62,9 @@ export default class Card {
   _toggleLike() {
     this._likeBtn.classList.toggle("main__gallery-like-button_active");
   }
-  // delete
-  _handleDelete() {
+
+  //Borrar tarjeta
+  removeCard() {
     this._element.remove();
     this._element = null;
   }

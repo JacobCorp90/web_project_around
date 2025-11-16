@@ -4,6 +4,7 @@ import Section from "../components/Section.js";
 import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 import PopupWithProfileImage from "../components/PopupWithProfileImage.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
@@ -45,6 +46,9 @@ const userInfo = new UserInfo({
   aboutSelector: ".header__subtitle",
 });
 
+const confirmDeletePopup = new PopupWithConfirmation(".confirm-popup");
+confirmDeletePopup.setEventListeners();
+
 // 3) Tarjetas (renderer - card - addItem)
 
 const templateSelector = "#card-template";
@@ -52,9 +56,20 @@ const cardSection = new Section(
   {
     items: initialCards,
     renderer: (item) => {
-      const card = new Card(item, templateSelector, ({ name, link }) =>
-        imagePopup.open({ name, link })
+      const card = new Card(
+        item,
+        templateSelector,
+        ({ name, link }) => imagePopup.open({ name, link }),
+        (cardInstance) => {
+          // Abrir popup de confirmación
+          confirmDeletePopup.setSubmitAction(() => {
+            cardInstance.removeCard();
+            confirmDeletePopup.close();
+          });
+          confirmDeletePopup.open();
+        }
       );
+
       const cardElement = card.generateCard();
       cardSection.addItem(cardElement);
     },
