@@ -8,7 +8,9 @@ import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 import PopupWithProfileImage from "../components/PopupWithProfileImage.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
+import Api from "../components/Api.js";
 
+/*
 const initialCards = [
   {
     name: "Valle de Yosemite",
@@ -35,6 +37,15 @@ const initialCards = [
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg",
   },
 ];
+*/
+
+const api = new Api({
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  headers: {
+    authorization: "995af76b-c320-41b0-b3d0-130cb52ff598",
+    "Content-Type": "application/json",
+  },
+});
 
 // 2) Instancias iniciales
 
@@ -46,40 +57,99 @@ const userInfo = new UserInfo({
   aboutSelector: ".header__subtitle",
 });
 
+const profileImageElement = document.querySelector(".header__profile-image");
+
+// 3) Carga inicial desde la API: usuario + tarjetas
+
+let currentUserId;
+
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cards]) => {
+    // Guardar id de usuario actual
+    currentUserId = userData._id;
+
+    // Cargar datos del usuario
+
+    userInfo.setUserInfo({
+      name: userData.name,
+      about: userData.about,
+    });
+    // Cargar avatar del servidor
+    profileImageElement.src = userData.avatar;
+    // Crear la Section con las tarjetas del servidor
+    cardSection = new Section(
+      {
+        items: cards,
+        renderer: (item) => {
+          const cardElement = createCard(item);
+          cardSection.addItem(cardElement);
+        },
+      },
+      ".main__gallery"
+    );
+
+    // Renderizar las tarjetas
+    cardSection.renderer();
+  })
+  .catch((err) => {
+    console.log("Error cargando datos iniciales:", err);
+  });
+
 const confirmDeletePopup = new PopupWithConfirmation(".confirm-popup");
 confirmDeletePopup.setEventListeners();
 
-// 3) Tarjetas (renderer - card - addItem)
+// 4) Tarjetas (renderer - card - addItem)
 
 const templateSelector = "#card-template";
-const cardSection = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const card = new Card(
-        item,
-        templateSelector,
-        ({ name, link }) => imagePopup.open({ name, link }),
-        (cardInstance) => {
-          // Abrir popup de confirmación
-          confirmDeletePopup.setSubmitAction(() => {
+let cardSection;
+
+function createCard(cardData) {
+  const card = new Card(
+    cardData,
+    templateSelector,
+    // callback para abrir el popup de imagen
+    ({ name, link }) => imagePopup.open({ name, link }),
+    // callback al hacer click en la papelera
+    (cardInstance) => {
+      confirmDeletePopup.setSubmitAction(() => {
+        // 1) Llamamos a la API para borrar
+        api
+          .deleteCard(cardInstance.getId())
+          .then(() => {
+            // 2) Si todo va bien, quitamos la tarjeta del DOM
             cardInstance.removeCard();
             confirmDeletePopup.close();
+          })
+          .catch((err) => {
+            console.log("Error al eliminar la tarjeta:", err);
           });
-          confirmDeletePopup.open();
-        }
-      );
+      });
 
-      const cardElement = card.generateCard();
-      cardSection.addItem(cardElement);
+      // Abrimos el popup de confirmación
+      confirmDeletePopup.open();
     },
-  },
-  ".main__gallery"
-);
 
-cardSection.renderer();
+    // like / unlike
+    (cardInstance) => {
+      const cardId = cardInstance.getId();
+      const request = cardInstance.isLiked()
+        ? api.unlikeCard(cardId)
+        : api.likeCard(cardId);
+      request
+        .then((updatedCard) => {
+          cardInstance.setLikesState(updatedCard.isLiked);
+        })
+        .catch((err) => {
+          console.log("Error updating like status:", err);
+        });
+    },
+    currentUserId
+  );
 
-// 4) Selectores de formularios/inputs
+  return card.generateCard();
+}
+
+// 5) Selectores de formularios/inputs
 const profilePopupSelector = ".popup";
 const addImagePopupSelector = ".add-image-popup";
 const changeProfileImagePopupSelector = ".change-profile-image-popup";
@@ -90,19 +160,33 @@ const changeProfileImageFormEl = document.querySelector(
   ".change-profile-image-popup__form"
 );
 
-// Imagen de perfil en el header
-const profileImageElement = document.querySelector(".header__profile-image");
-
 const nameInput = document.querySelector(".popup__input_type_name");
 const aboutInput = document.querySelector(".popup__input_type_about");
 
 const titleInput = document.querySelector(".add-image-popup__input_type_title");
 const urlInput = document.querySelector(".add-image-popup__input_type_url");
 
-// 5) Popup editar perfil
+// 6) Popup editar perfil
 const editProfilePopup = new PopupWithForm(profilePopupSelector, (formData) => {
-  userInfo.setUserInfo(formData);
-  editProfilePopup.close();
+  editProfilePopup.setLoading(true);
+  api
+    .updateUserInfo({
+      name: formData.name,
+      about: formData.about,
+    })
+    .then((updateUser) => {
+      userInfo.setUserInfo({
+        name: updateUser.name,
+        about: updateUser.about,
+      });
+      editProfilePopup.close();
+    })
+    .catch((err) => {
+      console.log("Error updating user info:", err);
+    })
+    .finally(() => {
+      editProfilePopup.setLoading(false);
+    });
 });
 editProfilePopup.setEventListeners();
 
@@ -119,19 +203,28 @@ editButton.addEventListener("click", () => {
   editProfilePopup.open();
 });
 
-// 6) Popup añadir imagen
+// 7) Popup añadir imagen
 
 const addImagePopup = new PopupWithForm(addImagePopupSelector, (formData) => {
-  const card = new Card(
-    { name: formData.name, link: formData.link },
-    templateSelector,
-    ({ name, link }) => imagePopup.open({ name, link })
-  );
-  const cardElement = card.generateCard();
-  cardSection.addItem(cardElement);
-
-  addImagePopup.close();
+  addImagePopup.setLoading(true);
+  api
+    .addNewCard({
+      name: formData.name,
+      link: formData.link,
+    })
+    .then((newCard) => {
+      const cardElement = createCard(newCard);
+      cardSection.addItem(cardElement);
+      addImagePopup.close();
+    })
+    .catch((err) => {
+      console.log("Error adding new card:", err);
+    })
+    .finally(() => {
+      addImagePopup.setLoading(false);
+    });
 });
+
 addImagePopup.setEventListeners();
 
 // Abrir popup "Nueva imagen"
@@ -146,15 +239,26 @@ addButton.addEventListener("click", () => {
   addImagePopup.open();
 });
 
-// 7) Popup cambiar foto de perfil (solo front, sin API)
+// 8) Popup cambiar foto de perfil (solo front, sin API)
 
 // Instancia del popup para cambiar la imagen de perfil
 const changeProfileImagePopup = new PopupWithProfileImage(
   changeProfileImagePopupSelector,
   ({ link }) => {
-    // Actualiza la imagen de perfil con la URL escrita en el input
-    profileImageElement.src = link;
-    changeProfileImagePopup.close();
+    changeProfileImagePopup.setLoading(true);
+
+    api
+      .updateAvatar(link)
+      .then((updatedUser) => {
+        profileImageElement.src = updatedUser.avatar;
+        changeProfileImagePopup.close();
+      })
+      .catch((err) => {
+        console.log("Error updating profile image:", err);
+      })
+      .finally(() => {
+        changeProfileImagePopup.setLoading(false);
+      });
   }
 );
 
@@ -171,7 +275,7 @@ changeImageButton.addEventListener("click", () => {
   changeProfileImagePopup.open();
 });
 
-// 8) Validadores de formulario
+// 9) Validadores de formulario
 
 const profileValidator = new FormValidator(
   {
